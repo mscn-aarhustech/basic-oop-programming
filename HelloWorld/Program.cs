@@ -1,6 +1,14 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using HelloWorld.Utilities;
 
-string firstFriend = "Maria";
-string secondFriend = "Sage";
-Console.WriteLine($"My friends are {firstFriend} and {secondFriend}");
+namespace HelloWorld
+{
+    public static class Program
+    {
+        public static void Main( string[] args )
+        {
+            // See https://aka.ms/new-console-template for more information
+            Console.WriteLine("Hello, World!");
+            ToolBox.PrintFriends();
+        }
+    }
+}
