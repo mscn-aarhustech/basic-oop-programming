@@ -1,7 +1,7 @@
 ﻿using Raylib_cs;
 using System.Numerics; // Required for Vector2 used in lines/triangles
 
-namespace MyRaylibGame;
+namespace RayLibAsteroids;
 
 class Program
 {
