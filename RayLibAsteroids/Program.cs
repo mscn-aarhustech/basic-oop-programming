@@ -7,6 +7,7 @@ class Program
 {
     static void Main()
     {
+        
         // Set MSAA 4x (smooths jagged edges of geometry)
         //Raylib.SetConfigFlags(ConfigFlags.Msaa4xHint);
 
