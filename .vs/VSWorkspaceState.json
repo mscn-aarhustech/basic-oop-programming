@@ -1,8 +1,9 @@
 {
   "ExpandedNodes": [
     "",
+    "\\HelloWorld",
     "\\HelloWorldWithMain"
   ],
-  "SelectedNode": "\\HelloWorldWithMain\\HelloWorldWithMain.csproj",
+  "SelectedNode": "\\HelloWorld\\HelloWorld.csproj",
   "PreviewInSolutionExplorer": false
 }
