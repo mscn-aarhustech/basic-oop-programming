@@ -4,7 +4,11 @@ using System.Text;
 
 namespace RayLibAsteroids
 {
-    internal class Particle
+    internal class Particle : GameObject
     {
+        public Particle()
+        {
+            
+        }
     }
 }

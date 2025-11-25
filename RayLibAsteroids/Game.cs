@@ -6,5 +6,9 @@ namespace RayLibAsteroids
 {
     internal class Game
     {
+        public Game()
+        {
+            
+        }
     }
 }

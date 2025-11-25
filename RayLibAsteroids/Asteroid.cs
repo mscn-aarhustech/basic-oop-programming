@@ -4,7 +4,11 @@ using System.Text;
 
 namespace RayLibAsteroids
 {
-    internal class Asteroid
+    internal class Asteroid : GameObject
     {
+        public Asteroid()
+        {
+            
+        }
     }
 }
