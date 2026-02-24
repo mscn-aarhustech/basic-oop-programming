@@ -32,7 +32,7 @@ class Planet {
 
        // Add dummy properties to bloat the class
        // This prevents a class instances from fitting into the cache and forces heap allocation
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 10; i++) {
             this[`dummy_property_${i}`] = Math.random();
         }
     }

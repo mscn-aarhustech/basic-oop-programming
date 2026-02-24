@@ -14,6 +14,10 @@ class Planets {
         this.density = new Float32Array(maxObjects);
         this.radius = new Float32Array(maxObjects);
         this.color = new Uint8Array(maxObjects * 3);
+
+        // for (let i = 0; i < 100; i++) {
+        //     this[`dummy_property_${i}`] = new Float32Array(maxObjects);
+        // }
     }
 }
 
@@ -46,6 +50,7 @@ class World {
         //requestAnimationFrame(() => this.run());
     }
     calculateGravity() {
+        
         for(let i = 0; i < this.planets.maxObjects - 1; i++) {
             for(let j = i + 1; j < this.planets.maxObjects; j++) {
 
