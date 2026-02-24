@@ -1,11 +1,3 @@
-// This code example does not follow the four pillars of OOP design principles
-// How do We implement Encapsulation, Inheritance, Abstraction, Polymorphism?
-
-let vehicleSerialNumber = "Please only read this if you are allowed to! Seriously! Here it is: 42";
-function VehicleSound() {""};
-let boatSerialNumber = vehicleSerialNumber;
-function BoatSound() {"Vrrooommm"};
-
 // Abstraction
 class Vehicle {
     #serialNumber // Encapsulation
@@ -27,15 +19,33 @@ class Boat extends Vehicle {
     }
     // Polymorphic behavior
     makeSound() {
-        return "Vrrooommm!"
+        return "Vrrooommm! Splash!";
+    }
+}
+
+class Airplane extends Vehicle {
+    constructor(serialNumber) {
+        super(serialNumber);
+    }
+    // Polymorphic behavior
+    makeSound() {
+        return "Brrrrr!! Swoosh!";
     }
 }
 
 //const vehicle = new Vehicle("42"); // Error
 
 const boat = new Boat("42");
+const airplane = new Airplane("1337");
 
+// Log object
 console.log(boat);
-console.log(boat.makeSound());
+console.log(airplane);
 
+// Log object sound
+console.log(boat.makeSound());
+console.log(airplane.makeSound());
+
+// Accessing private member returns error
 //console.log(boat.#serialNumber); // Error
+//console.log(airplane.#serialNumber); // Error
