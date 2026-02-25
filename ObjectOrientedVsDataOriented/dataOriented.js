@@ -33,7 +33,7 @@ class World {
             this.planets.positionX[i] = Math.random() * this.width;
             this.planets.positionY[i] = Math.random() * this.height;
             this.planets.mass[i] = 10 + Math.random() * 90;
-            this.planets.density[i] = 0.5;
+            this.planets.density[i] = 2.0;
             this.planets.radius[i] = Math.sqrt(this.planets.mass[i] / (this.planets.density[i] * Math.PI));
             const r = Math.floor(Math.random() * 256);
             const g = Math.floor(Math.random() * 256);
@@ -44,40 +44,78 @@ class World {
         }
     }
     run() {
+        let startTime = performance.now();
+
         this.calculateGravity();
         this.integrate();
-        //this.render();
-        //requestAnimationFrame(() => this.run());
+
+        let endTime = performance.now();
+        timeSum += endTime - startTime;
+        timeFrames++;
+
+        if (timeSum > 100) {
+            timeSum /= timeFrames;
+            document.getElementById("ms").innerHTML = timeSum.toFixed(3) + " ms";
+            timeFrames = 0;
+            timeSum = 0;
+        }
     }
     calculateGravity() {
         
-        for(let i = 0; i < this.planets.maxObjects - 1; i++) {
-            for(let j = i + 1; j < this.planets.maxObjects; j++) {
+        const n = this.planets.maxObjects;
+        const posX = this.planets.positionX;
+        const posY = this.planets.positionY;
+        const forceX = this.planets.forceX;
+        const forceY = this.planets.forceY;
+        const mass = this.planets.mass;
+        const radius = this.planets.radius;
+        const G = this.gravitationalConst;
 
-                const distanceX = this.planets.positionX[j] - this.planets.positionX[i];
-                const distanceY = this.planets.positionY[j] - this.planets.positionY[i];
+        for(let i = 0; i < n - 1; i++) {
+            
+            const xi = posX[i];
+            const yi = posY[i];
+            const mi = mass[i];
+            const ri = radius[i];
+            
+            let currentForceX = 0;
+            let currentForceY = 0;
+
+            for(let j = i + 1; j < n; j++) {
+                const distanceX = posX[j] - xi;
+                const distanceY = posY[j] - yi;
 
                 const distanceSquared = distanceX * distanceX + distanceY * distanceY;
 
-                const sumRadiiSquared = (this.planets.radius[i] + this.planets.radius[j]) ** 2;
+                const sumRadii = ri + radius[j];
+                const sumRadiiSquared = sumRadii * sumRadii;
 
-                if(distanceSquared < sumRadiiSquared) { continue };
+                if(distanceSquared < sumRadiiSquared) { 
+                    continue; 
+                }
 
                 const distance = Math.sqrt(distanceSquared);
 
                 const unitX = distanceX / distance;
                 const unitY = distanceY / distance;
 
-                const gravityForce = (this.gravitationalConst * this.planets.mass[i] * this.planets.mass[j]) / distanceSquared;
+                const gravityForce = (G * mi * mass[j]) / distanceSquared;
+                const fx = gravityForce * unitX;
+                const fy = gravityForce * unitY;
 
-                this.planets.forceX[i] += gravityForce * unitX;
-                this.planets.forceY[i] += gravityForce * unitY;
-                this.planets.forceX[j] -= gravityForce * unitX;
-                this.planets.forceY[j] -= gravityForce * unitY;
+                currentForceX += fx;
+                currentForceY += fy;
+
+                forceX[j] -= fx;
+                forceY[j] -= fy;
             }
+            
+            forceX[i] += currentForceX;
+            forceY[i] += currentForceY;
         }
     }
     integrate() {
+        
         for(let i = 0; i < this.planets.maxObjects; i++) {
 
             this.planets.velocityX[i] += (this.planets.forceX[i] / this.planets.mass[i]) * this.timeStep;
@@ -110,10 +148,23 @@ class World {
     }
 }
 
-let canvas = document.querySelector("#simulationCanvas");
+const ms = document.createElement('ms');
+ms.id = 'ms';
+document.body.appendChild(ms);
+const content = document.createElement('div');
+document.body.appendChild(content);
+content.innerHTML = '<canvas id="simulationCanvas"></canvas>';
+
+// canvas
+canvas = document.querySelector("#simulationCanvas");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
+
 let context = canvas.getContext("2d");
+
+let timeFrames = 0;
+let timeSum = 0;
+let iterations = 0;
 
 const world = new World(canvas.width, canvas.height, 1000);
 console.log(world);

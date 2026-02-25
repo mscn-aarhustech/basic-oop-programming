@@ -23,7 +23,7 @@ class Planet {
        this.velocity = new Vector2();
        this.force = new Vector2();
        this.mass = mass;
-       this.density = 0.5;
+       this.density = 2.0;
        this.radius = Math.sqrt(this.mass / (this.density * Math.PI));
        const r = Math.floor(Math.random() * 256);
        const g = Math.floor(Math.random() * 256);
@@ -32,9 +32,9 @@ class Planet {
 
        // Add dummy properties to bloat the class
        // This prevents a class instances from fitting into the cache and forces heap allocation
-        for (let i = 0; i < 10; i++) {
-            this[`dummy_property_${i}`] = Math.random();
-        }
+        // for (let i = 0; i < 10; i++) {
+        //     this[`dummy_property_${i}`] = Math.random();
+        // }
     }
 }
 
@@ -51,15 +51,29 @@ class World {
         }
     }
     run() {
+        let startTime = performance.now();
+
         this.calculateGravity();
         this.integrate();
-        //this.render();
-        //requestAnimationFrame(() => this.run());
+
+        let endTime = performance.now();
+        timeSum += endTime - startTime;
+        timeFrames++;
+
+        if (timeSum > 100) {
+            timeSum /= timeFrames;
+            document.getElementById("ms").innerHTML = timeSum.toFixed(3) + " ms";
+            timeFrames = 0;
+            timeSum = 0;
+        }
     }
     calculateGravity() {
         for(let i = 0; i < this.planets.length - 1; i++) {
+            
+            const planet_i = this.planets[i];
+
             for(let j = i + 1; j < this.planets.length; j++) {
-                const planet_i = this.planets[i];
+
                 const planet_j = this.planets[j];
                 
                 const distanceVector = new Vector2(
@@ -69,7 +83,8 @@ class World {
 
                 const distanceSquared = distanceVector.x * distanceVector.x + distanceVector.y * distanceVector.y;
 
-                const sumRadiiSquared = (planet_i.radius + planet_j.radius) ** 2;
+                const sumRadii = planet_i.radius + planet_j.radius;
+                const sumRadiiSquared = sumRadii * sumRadii;
 
                 if(distanceSquared < sumRadiiSquared) { continue };
 
@@ -116,10 +131,23 @@ class World {
     }
 }
 
-let canvas = document.querySelector("#simulationCanvas");
+const ms = document.createElement('ms');
+ms.id = 'ms';
+document.body.appendChild(ms);
+const content = document.createElement('div');
+document.body.appendChild(content);
+content.innerHTML = '<canvas id="simulationCanvas"></canvas>';
+
+// canvas
+canvas = document.querySelector("#simulationCanvas");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
+
 let context = canvas.getContext("2d");
+
+let timeFrames = 0;
+let timeSum = 0;
+let iterations = 0;
 
 const world = new World(canvas.width, canvas.height, 1000);
 
