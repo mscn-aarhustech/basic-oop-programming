@@ -45,6 +45,7 @@ class World {
         this.gravitationalConst = 10.0;
         this.timeStep = 0.01;
         this.planets = [];
+        
         for(let p = 0; p < numPlanets; p++) {
             const planet = new Planet(Math.random() * this.width, Math.random() * this.height, 10 + Math.random() * 90);
             this.planets.push(planet);
@@ -103,6 +104,7 @@ class World {
     }
     integrate() {
         for(let i = 0; i < this.planets.length; i++) {
+            
             const planet = this.planets[i];
 
             planet.velocity = planet.velocity.add(planet.force.divide(planet.mass).multiply(this.timeStep));
