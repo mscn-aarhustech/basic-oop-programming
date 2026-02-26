@@ -25,14 +25,14 @@ class Planet {
        this.mass = mass;
        this.density = 2.0;
        this.radius = Math.sqrt(this.mass / (this.density * Math.PI));
-       const r = Math.floor(Math.random() * 256);
-       const g = Math.floor(Math.random() * 256);
-       const b = Math.floor(Math.random() * 256);
+       const r = 64 + Math.floor(Math.random() * 192);
+       const g = 64 + Math.floor(Math.random() * 192);
+       const b = 64 + Math.floor(Math.random() * 192);
        this.color = `rgb(${r}, ${g}, ${b})`;
 
        // Add dummy properties to bloat the class
        // This prevents a class instances from fitting into the cache and forces heap allocation
-        // for (let i = 0; i < 10; i++) {
+        // for (let i = 0; i < 30; i++) {
         //     this[`dummy_property_${i}`] = Math.random();
         // }
     }
@@ -112,9 +112,9 @@ class World {
         }
     }
     render() {
+
         // Clear screen
         context.resetTransform();
-        //ctx.fillStyle = "rgb(32,96,32)";
         context.fillStyle = "rgb(0,0,0)";
         context.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -150,7 +150,6 @@ let timeSum = 0;
 let iterations = 0;
 
 const world = new World(canvas.width, canvas.height, 1000);
-
 console.log(world);
 
 requestAnimationFrame(() => world.render());

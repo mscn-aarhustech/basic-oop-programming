@@ -1,4 +1,3 @@
-
 class Planets {
     constructor(maxObjects) {
         
@@ -15,8 +14,8 @@ class Planets {
         this.radius = new Float32Array(maxObjects);
         this.color = new Uint8Array(maxObjects * 3);
 
-        // for (let i = 0; i < 100; i++) {
-        //     this[`dummy_property_${i}`] = new Float32Array(maxObjects);
+        // for (let i = 0; i < 30; i++) {
+        //     this[`dummy_property_${i}`] = Math.random(); //new Float32Array(maxObjects);
         // }
     }
 }
@@ -35,9 +34,9 @@ class World {
             this.planets.mass[i] = 10 + Math.random() * 90;
             this.planets.density[i] = 2.0;
             this.planets.radius[i] = Math.sqrt(this.planets.mass[i] / (this.planets.density[i] * Math.PI));
-            const r = Math.floor(Math.random() * 256);
-            const g = Math.floor(Math.random() * 256);
-            const b = Math.floor(Math.random() * 256);
+            const r = 64 + Math.floor(Math.random() * 192);
+            const g = 64 + Math.floor(Math.random() * 192);
+            const b = 64 + Math.floor(Math.random() * 192);
             this.planets.color[i * 3] = r;
             this.planets.color[i * 3 + 1] = g;
             this.planets.color[i * 3 + 2] = b;
@@ -63,59 +62,49 @@ class World {
     calculateGravity() {
         
         const n = this.planets.maxObjects;
-        const posX = this.planets.positionX;
-        const posY = this.planets.positionY;
-        const forceX = this.planets.forceX;
-        const forceY = this.planets.forceY;
-        const mass = this.planets.mass;
-        const radius = this.planets.radius;
         const G = this.gravitationalConst;
 
         for(let i = 0; i < n - 1; i++) {
             
-            const xi = posX[i];
-            const yi = posY[i];
-            const mi = mass[i];
-            const ri = radius[i];
-            
-            let currentForceX = 0;
-            let currentForceY = 0;
+            const iPosX = this.planets.positionX[i];
+            const iPosY = this.planets.positionY[i];
+            const iMass = this.planets.mass[i];
+            const iRadius = this.planets.radius[i];
+            let iForceX = this.planets.forceX[i];
+            let iForceY = this.planets.forceY[i];
 
             for(let j = i + 1; j < n; j++) {
-                const distanceX = posX[j] - xi;
-                const distanceY = posY[j] - yi;
+                const distanceX = this.planets.positionX[j] - iPosX;
+                const distanceY = this.planets.positionY[j] - iPosY;
 
                 const distanceSquared = distanceX * distanceX + distanceY * distanceY;
 
-                const sumRadii = ri + radius[j];
+                const sumRadii = iRadius + this.planets.radius[j];
                 const sumRadiiSquared = sumRadii * sumRadii;
 
-                if(distanceSquared < sumRadiiSquared) { 
-                    continue; 
-                }
+                if(distanceSquared < sumRadiiSquared) { continue; }
 
                 const distance = Math.sqrt(distanceSquared);
 
                 const unitX = distanceX / distance;
                 const unitY = distanceY / distance;
 
-                const gravityForce = (G * mi * mass[j]) / distanceSquared;
+                const gravityForce = (G * iMass * this.planets.mass[j]) / distanceSquared;
                 const fx = gravityForce * unitX;
                 const fy = gravityForce * unitY;
 
-                currentForceX += fx;
-                currentForceY += fy;
+                iForceX += fx;
+                iForceY += fy;
 
-                forceX[j] -= fx;
-                forceY[j] -= fy;
+                this.planets.forceX[j] -= fx;
+                this.planets.forceY[j] -= fy;
             }
             
-            forceX[i] += currentForceX;
-            forceY[i] += currentForceY;
+            this.planets.forceX[i] += iForceX;
+            this.planets.forceY[i] += iForceY;
         }
     }
     integrate() {
-        
         for(let i = 0; i < this.planets.maxObjects; i++) {
 
             this.planets.velocityX[i] += (this.planets.forceX[i] / this.planets.mass[i]) * this.timeStep;
