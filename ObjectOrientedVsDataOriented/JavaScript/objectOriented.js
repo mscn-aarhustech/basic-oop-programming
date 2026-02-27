@@ -31,7 +31,8 @@ class Planet {
        this.color = `rgb(${r}, ${g}, ${b})`;
 
        // Add dummy properties to bloat the class
-       // This prevents a class instances from fitting into the cache and forces heap allocation
+       // This prevents a class instances from fitting into the cache 
+       // and forces heap allocation in RAM
         // for (let i = 0; i < 30; i++) {
         //     this[`dummy_property_${i}`] = Math.random();
         // }
@@ -87,7 +88,8 @@ class World {
                 const sumRadii = planet_i.radius + planet_j.radius;
                 const sumRadiiSquared = sumRadii * sumRadii;
 
-                if(distanceSquared < sumRadiiSquared) { continue };
+                if(distanceSquared < sumRadiiSquared * 0.5) { continue };
+                //if(distanceSquared < 2.0) { continue; }
 
                 const distance = Math.sqrt(distanceSquared);
 

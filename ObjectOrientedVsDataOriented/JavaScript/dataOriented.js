@@ -70,8 +70,8 @@ class World {
             const iPosY = this.planets.positionY[i];
             const iMass = this.planets.mass[i];
             const iRadius = this.planets.radius[i];
-            let iForceX = this.planets.forceX[i];
-            let iForceY = this.planets.forceY[i];
+            // let iForceX = this.planets.forceX[i];
+            // let iForceY = this.planets.forceY[i];
 
             for(let j = i + 1; j < n; j++) {
                 const distanceX = this.planets.positionX[j] - iPosX;
@@ -82,7 +82,8 @@ class World {
                 const sumRadii = iRadius + this.planets.radius[j];
                 const sumRadiiSquared = sumRadii * sumRadii;
 
-                if(distanceSquared < sumRadiiSquared) { continue; }
+                if(distanceSquared < sumRadiiSquared * 0.5) { continue; }
+                //if(distanceSquared < 2.0) { continue; }
 
                 const distance = Math.sqrt(distanceSquared);
 
@@ -93,15 +94,18 @@ class World {
                 const fx = gravityForce * unitX;
                 const fy = gravityForce * unitY;
 
-                iForceX += fx;
-                iForceY += fy;
+                // iForceX += fx;
+                // iForceY += fy;
+
+                this.planets.forceX[i] += fx;
+                this.planets.forceY[i] += fy;
 
                 this.planets.forceX[j] -= fx;
                 this.planets.forceY[j] -= fy;
             }
             
-            this.planets.forceX[i] += iForceX;
-            this.planets.forceY[i] += iForceY;
+            // this.planets.forceX[i] += iForceX;
+            // this.planets.forceY[i] += iForceY;
         }
     }
     integrate() {
