@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Big O Complexity Comparison</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #ffffff;
+            color: #212529;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        header {
+            padding: 1rem;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        h1 {
+            color: #343a40;
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        .chart-wrapper {
+            flex-grow: 1;
+            padding: 1rem 2rem 2rem 2rem;
+            position: relative;
+            min-height: 0;
+        }
+        canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Big O Notation Complexity Comparison</h1>
+    </header>
+    
+    <div class="chart-wrapper">
+        <canvas id="bigOChart"></canvas>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const ctx = document.getElementById('bigOChart').getContext('2d');
+            
+            /**
+             * Continuous approximation of n! using Stirling's Formula.
+             * This prevents the "staircase" effect of discrete factorial loops
+             * and allows for a smooth curve that meets the Y-axis limit correctly.
+             */
+            function continuousFactorial(n) {
+                if (n <= 1) return 1;
+                // Stirling's approximation: n! ≈ sqrt(2 * PI * n) * (n / e)^n
+                return Math.sqrt(2 * Math.PI * n) * Math.pow((n / Math.E), n);
+            }
+
+            const maxN = 25;
+            const maxY = 100; 
+            const labels = [];
+
+            for (let i = 1; i <= maxN; i += 0.05) labels.push(i);
+
+            const bigOConfigs = [
+                { name: 'Constant O(1)', func: n => 1, color: '#22c55e' },
+                { name: 'Logarithmic O(log n)', func: n => Math.log2(n || 1), color: '#3b82f6' },
+                { name: 'Linear O(n)', func: n => n, color: '#eab308' },
+                { name: 'Log linear O(n log n)', func: n => n * Math.log2(n || 1), color: '#f97316' },
+                { name: 'Exponential O(n²)', func: n => Math.pow(n, 2), color: '#ef4444' },
+                { name: 'Polynomial O(2ⁿ)', func: n => Math.pow(2, n), color: '#a855f7' },
+                { name: 'Factorial O(n!)', func: n => continuousFactorial(n), color: '#1e293b' }
+            ];
+
+            const datasets = bigOConfigs.map(config => {
+                const data = labels.map(n => {
+                    const val = config.func(n);
+                    // Return value even if slightly above maxY to ensure lines reach the edge
+                    return val > maxY * 1.1 ? null : val;
+                });
+
+                return {
+                    label: config.name,
+                    data: data,
+                    borderColor: config.color,
+                    backgroundColor: 'transparent',
+                    borderWidth: 3,
+                    pointRadius: 0,
+                    fill: false,
+                    tension: 0.1,
+                    spanGaps: false
+                };
+            });
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                font: { size: 18, weight: '500' },
+                                usePointStyle: true,
+                                padding: 20
+                            }
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: (context) => `${context.dataset.label}: ${context.parsed.y?.toFixed(2) || 'Out of bounds'}`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            title: {
+                                display: true,
+                                text: 'Input Size (n)',
+                                font: { size: 16, weight: '600' }
+                            },
+                            min: 1,
+                            max: maxN,
+                            grid: { color: 'rgba(0, 0, 0, 0.1)' }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Operations / Complexity',
+                                font: { size: 16, weight: '600' }
+                            },
+                            min: 0,
+                            max: maxY,
+                            grid: { color: 'rgba(0, 0, 0, 0.1)' }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -2,7 +2,7 @@
 "use strict";
 
 const deltaTime = 0.01;
-const G = 0.000001;
+const G = 0.000002;
 
 const simParams = new Float32Array([deltaTime, G]);
 
@@ -204,7 +204,7 @@ fn main(@builtin(global_invocation_id) id : vec3<u32>) {
     let direction = normalize(diff);
 
     // Newtonian gravitational attraction
-    if (distSqr < 0.0001) { continue; }
+    if (distSqr < 0.001) { continue; }
       
     let f = (G * p.mass * other.mass) / distSqr;
     force += direction * f;
