@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+// Constant complexity O(1) example
+
+const smallArray = new Array(10).fill('data');
+const largeArray = new Array(10_000_000).fill('data');
+
+function accessElement(arr) {
+    const start = performance.now();
+    const element = arr[5];
+    const end = performance.now();
+    
+    return end - start;
+}
+
+const timeSmall = accessElement(smallArray);
+console.log(`Small Array (Length: ${smallArray.length}): ${timeSmall.toFixed(4)} ms`);
+
+const timeLarge = accessElement(largeArray);
+console.log(`Large Array (Length: ${largeArray.length}): ${timeLarge.toFixed(4)} ms`);
+
+console.log(`Difference: ${Math.abs(timeLarge - timeSmall).toFixed(4)} ms`);
+
+// Output:
+// Small Array (Length: 10): 0.0000 ms
+// O_1_index.html:27 Large Array (Length: 10000000): 0.0000 ms
+// O_1_index.html:29 Difference: 0.0000 ms
+    </script>
+</body>
+</html>
