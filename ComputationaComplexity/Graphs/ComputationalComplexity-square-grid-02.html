@@ -69,7 +69,7 @@
             const maxLimitY = 100;
             const labels = [];
 
-            for (let i = 0; i <= maxLimitX; i += 0.01) labels.push(i);
+            for (let i = 1; i <= maxLimitX; i += 0.01) labels.push(i);
 
             const bigOConfigs = [
                 { name: 'Constant O(1)', func: n => 1, color: '#22c55e' },
@@ -119,7 +119,7 @@
                                 font: { size: 18 },
                                 stepSize: 10 // FORCES X-AXIS GRID STEPS TO 10
                             },
-                            min: 0,
+                            min: 1,
                             max: maxLimitX,
                             grid: { color: 'rgba(0, 0, 0, 0.1)' }
                         },
