@@ -7,22 +7,27 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background-color: #ffffff;
+            color: #212529;
             margin: 0;
+            padding: 0;
+            height: 100vh;
             display: flex;
             flex-direction: column;
-            height: 100vh;
             overflow: hidden;
         }
         header {
-            padding: 1rem;
+            padding: 1.5rem;
             text-align: center;
+            flex-shrink: 0;
         }
         h1 {
-            font-size: 2.8rem;
-            font-weight: 700;
             color: #343a40;
+            margin: 0;
+            /* ADJUST HEADLINE SIZE HERE */
+            font-size: 2.8rem; 
+            font-weight: 700;
         }
         .chart-wrapper {
             flex-grow: 1;
@@ -42,7 +47,7 @@
 <body>
 
     <header>
-        <h1>Big O Notation Complexity Comparison</h1>
+        <!-- <h1>Big O Notation Complexity Comparison</h1> -->
     </header>
     
     <div class="chart-wrapper">
@@ -64,7 +69,7 @@
             const maxLimitY = 100;
             const labels = [];
 
-            for (let i = 0; i <= maxLimitX; i += 0.5) labels.push(i);
+            for (let i = 0; i <= maxLimitX; i += 0.01) labels.push(i);
 
             const bigOConfigs = [
                 { name: 'Constant O(1)', func: n => 1, color: '#22c55e' },

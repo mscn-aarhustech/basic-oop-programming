@@ -31,20 +31,31 @@
         }
         .chart-wrapper {
             flex-grow: 1;
-            padding: 1rem 2rem 2rem 2rem;
             position: relative;
             min-height: 0;
+            margin: 0 auto; /* Centers the chart */
+            
+            /* --- ADJUST WIDTH CONTROLS HERE --- */
+            width: 100%;
+            /* max-width: 1200px; Limits the maximum width */
+            padding-left: 14rem;  /* Horizontal padding left */
+            padding-right: 14rem; /* Horizontal padding right */
+            /* padding-bottom: 2rem; */
+            padding-top: 4rem;
+            box-sizing: border-box;
         }
         canvas {
-            width: 100% !important;
-            height: 100% !important;
+            width: 90vw; 
+            max-height: 80vh;
+            display: flex;
+            justify-content: center;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Big O Notation Complexity Comparison</h1>
+        <!-- <h1>Big O Notation Complexity Comparison</h1> -->
     </header>
     
     <div class="chart-wrapper">
@@ -64,7 +75,7 @@
             const maxY = 100; 
             const labels = [];
 
-            for (let i = 1; i <= maxN; i += 0.05) labels.push(i);
+            for (let i = 1; i <= maxN; i += 0.01) labels.push(i);
 
             const bigOConfigs = [
                 { name: 'Constant O(1)', func: n => 1, color: '#22c55e' },
@@ -110,8 +121,7 @@
                             position: 'top',
                             labels: {
                                 font: { size: 20, weight: '500' },
-                                usePointStyle: true,
-                                padding: 20
+                                usePointStyle: true
                             }
                         }
                     },
@@ -121,10 +131,10 @@
                             title: {
                                 display: true,
                                 text: 'Input Size (n)',
-                                font: { size: 20, weight: '600' } // ADJUST X-AXIS LABEL SIZE
+                                font: { size: 20, weight: '600' }
                             },
                             ticks: {
-                                font: { size: 18 } // ADJUST X-AXIS NUMBERS SIZE
+                                font: { size: 18 }
                             },
                             min: 1,
                             max: maxN,
@@ -134,10 +144,10 @@
                             title: {
                                 display: true,
                                 text: 'Operations / Complexity',
-                                font: { size: 20, weight: '600' } // ADJUST Y-AXIS LABEL SIZE
+                                font: { size: 20, weight: '600' }
                             },
                             ticks: {
-                                font: { size: 18 } // ADJUST Y-AXIS NUMBERS SIZE
+                                font: { size: 18 }
                             },
                             min: 0,
                             max: maxY,
